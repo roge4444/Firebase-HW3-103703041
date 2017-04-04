@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+    <head>
+        <script src="jquery.min.js"></script>
+        <script src="index.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
+        <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyD2o34gevs-PEktPV3Itm8L0LaNqvALVsw",
+            authDomain: "fir-99a40.firebaseapp.com",
+            databaseURL: "https://fir-99a40.firebaseio.com",
+            projectId: "fir-99a40",
+            storageBucket: "fir-99a40.appspot.com",
+            messagingSenderId: "1070012852290"
+        };
+        firebase.initializeApp(config);
+        var storageRef = firebase.storage().ref();
+
+        storageRef.child('233035994939.jpg').getDownloadURL().then(function(url){
+            document.getElementById('title').src = url;
+        })
+
+        storageRef.child('55e66daf542c9.jpg').getDownloadURL().then(function(url){
+            document.getElementById('one').src = url;
+        })
+
+        storageRef.child('163724962762-390x205.jpeg').getDownloadURL().then(function(url){
+            document.getElementById('two').src = url;
+        })
+
+        storageRef.child('GoogleOct4event-390x205.jpg').getDownloadURL().then(function(url){
+            document.getElementById('three').src = url;
+        })
+        var count = 1;
+        var base = 'message/secret-message-';
+        var messageRef = storageRef.child('message/secret-message-1.txt');
+        //document.getElementById('txt').href = url;
+
+        function check(url){
+            count += 1;
+            messageRef = storageRef.child(base+count+'.txt');
+            messageRef.getDownloadURL().then(check,function(url){
+                //alert('目前累積留言: '+count+'個');
+                $('#now').text('(目前累積留言: '+(count-1)+'個)');
+                $('#num').text('(1~'+(count-1)+')');
+            })
+        }
+        messageRef.getDownloadURL().then(check,function(url){
+            //alert('目前累積留言: '+count+'個');
+            $('#now').text('(目前累積留言: '+(count-1)+'個)');
+            $('#num').text('('+(count-1)+')');
+        })
+
+        
+
+        function upload(){
+            var data = '作者名稱: ' + $('#name').val() + '\n留言內文:\n' + $('#message').val();
+            messageRef.putString(data.replace(/\n/g,"\r\n"));
+            $('#name').val('');
+            $('#message').val('');
+            $('#now').text('(目前累積留言: '+count+'個)');
+            $('#num').text('(1~'+count+')');
+            alert('送出成功! 目前累積留言'+count+'個');
+            count += 1;
+        }
+
+        function download(){
+            var target = $('#download_num').val();
+            if(target < 1 || target > (count-1)){
+                alert('請輸入正確的數字');
+            }
+            storageRef.child(base+target+'.txt').getDownloadURL().then(function(url){
+                location.href = url;
+            })
+        }
+        
+        </script>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel ="stylesheet" href="index.css">
+        <title>Google 正在尋求的新模式，到底有多難？</title>
+    </head>
+    <body>
+        <div id="div_right">
+            <center><p>留言給我</p>
+            <p id="now"></p>
+            作者名稱: <input id="name" type="text"><br>
+            留言內文:<br><textarea id="message" cols="30" rows="8"></textarea><br>
+            <button onclick="upload()">送出</button><br>
+            請輸入下載留言序號
+            <span id="num"></span><br>
+            <input id="download_num" type="number" min="1" ><br>
+            <button onclick="download()">下載</button>
+            </center><br>
+
+            <table id="ad">
+                <tr>
+                    <th>主廣告１</th>
+                    <th>主廣告２</th>
+                </tr>
+                <tr>
+                    <td>子廣告３</td>
+                    <td>子廣告４</td>
+                </tr>
+            </table>
+            
+        </div>
+        <div id ="back_to_top">
+            <button id="top">Top</button>
+        </div>
+        <div id ="change_font">
+            <button onclick="small()">small</button>
+            <button onclick="medium()">medium</button>
+            <button onclick="large()">large</button>
+        </div>
+        <div class="top-image">
+            <img id="title" alt="Google 正在尋求的新模式，到底有多難？">
+        </div>
+        <div class="content_large">
+            <h1 id="tt"><strong>Google 正在尋求的新模式，到底有多難？</strong></h1>
+            <span class="author">翻譯：虎嗅網 作者：Stratechery/Ben Thompson</span>
+            <span class="post-time">2016-10-08</span>
+            <h2>Google 正在尋求的新模式，到底有多難？</h2>
+            <p>本文來自Stratechery，作者：Ben Thompson，原文標題<a href="https://stratechery.com/2016/google-and-the-limits-of-strategy/">《GOOGLE AND THE LIMITS OF STRATEGY》</a>。</p>
+            <p>10月5日凌晨，Google 發布了旗下新一代智慧手機產品，Google Pixel和Pixel XL。在當天的發布會結束後，約翰·格魯伯（譯者註：作家，科技部落格Daring Fireball的作者）這樣說道：</p>
+            <ol>
+                <li>
+                    <p style="padding-left: 30px;">
+                        <em>Google 從第一款手機開始，就在和蘋果針鋒相對，不能因為Nexus的失敗就否定了這件事情。</em>
+                    </p>
+                </li>
+                <li>
+                    <p style="padding-left: 30px;">
+                        <em>前Google 工程副總裁維克·甘多拉曾在2010年Google I/O大會上，用一整段演講來狂噴iPhone、iPod，號稱要用“開放打敗封閉”，還說超過60種不同的Android設備（相比起今天Android設備數量來真是滄海一粟啊）將構成一個何等的生態，凡此種種必將取勝，從而將行動世界從“一個人，一家公司，一個設備”的未來中拯救出來。為了更有說服力，甘多拉甚至將奧威爾的《1984》和iPhone作對比。</em>
+                    </p>
+                </li>
+            </ol>
+            <p>看上去，格魯伯一點都沒有被Google 新的Pixel手機所打動。</p>
+            <p>格魯伯既是正確的，也是錯誤的。</p>
+            <p><h2><strong>Google 在用智慧手機賺錢上完全不敵蘋果</strong></h2>
+            <p>是的，如格魯伯所回憶，甘多拉曾極力反對蘋果，並豪言壯語承諾未來。還記得當天在他演講結束後，那些曾相信他的人最終得到了一台HTC EVO 4G（譯者註：這是一台飽受爭議的智慧手機）。與此同時，蘋果的競爭對手們，比如三星、摩托羅拉、HTC，他們都開始使用Google 的Android，當他們致力於將手機放到每個人的口袋裡時，這已經變成一場零和遊戲。需要提醒的事實是，當Google 號稱反對蘋果時，當時Google 搜索、Google 地圖這些Google 的軟體全都在iOS上運行</p>
+            <p>正如我們所看到的那樣，兩年後iOS拋棄了YouTube，並製作了一個基於Google 地圖且iOS獨有的預設地圖應用。當然這與甘多拉講話的內容無關，事實上蘋果早在2009年就收購了測繪公司Placebase。與此同時，Google 也推出了Android獨有的導航軟體，turn-by-turn。</p>
+            <p>很少有人了解Google 和蘋果之間到底發生了什麼。人們都知道的是，蘋果教主史蒂夫·賈伯斯覺得Android手機和iOS手機太像了，所以兩家才出現了隔閡。但是Google 早在蘋果推出iPhone的兩年前收購了Android，只不過Google 此舉是為了對抗微軟。事實上，當iPhone問世，誰還會去關心Android呢？</p>
+            <p>可是Google 的turn-by-turn，作為一個Android平台獨占的地圖軟體，推出的目的是為何呢？ HTC可以藉此多賣幾台手機，但是沒有廠商需要為這項來自Google 的特別服務支付1分錢。</p>
+            <p>事實就是，如果指望它來賺錢，Google 就完全不是蘋果的競爭對手。蘋果是一家垂直的公司，花費研發資金投入到設計和生產當中，再加上材料成本，最後把這些設備賣掉。以此來和其他廠商進行零和博弈。蘋果創造了差異化的體驗，客戶為此支付溢價，最終佔據了一定的市場市佔率，同時盈利部分遠高於前期的花費。</p>
+            <p>Google 是一個完全不同類型的公司，幾乎所有的成本都是固定的——研發和數據。這也就意味著Google 的盈利將與市場市佔率齊頭並進，因此廣告對於Google 的應用來說就是一種完美的商業模式。越多的人使用Google ，廣告的傳播面就越廣，從而吸引更多的廣告投放商。</p>
+            <p>這就是為什麼任何有利於Android的事情都是Google 在戰略上犯的錯誤——Google 給人的預期是服務所有用戶，而Android只能佔據一部分的智慧手機和平板。其次，蘋果可能會不遺餘力地在它的地圖上發力，而Google 為了改進數億潛在Google 用戶在用Android設備上Google 地圖時的體驗所做的努力，換來的是大量數據留在了別的公司那裡。</p>
+            <p>這就是甘多拉的演講真正重要的地方。我根本不相信Google 裡的任何人會全力以他們的服務去討好Android的用戶。更確切的是，Android團隊將完全致力於對抗iOS，他們確實應該這樣做！而人性將確保Google 其他的服務去搭Android的順風車，僅此而已。請記住，鑑於Google 的商業模式，佔據市場市佔率和獲取利潤是完全相關的。很容易看出圍繞Google 核心業務發展的思想和文化未能應用到設備上的零和博弈。</p>
+            <p>確實，Android的勝利和Google 緊密相關。但另一方面，事實上，Android只是大毒蛇（譯者註：指三星華為這些用Android系統的手機廠商）的資產。</p>
+            <p><h2><strong>Google 助手，利弊集於一身</strong></h2>
+            <p>在當天的演講中，Google CEO Sundar Pichai在技術歷史的重新統計後強調，<strong>我們正在由一個行動優先的時代進入一個AI優先的時代。</strong>這也是為什麼Google 會在Pixel中強調Google 助手：</p>
+            <p>在iOS6時代，蘋果首次推出Siri。這是第一次用戶可以實現人機語音互動，但是它（譯者註：指Siri）在最開始的表現並不出色。Google 在語音互動領域的理解更為深刻，Google 助手將會擴大語音互動的雙方，通過計算，讓它代替你的眼睛和手，隨時隨地幫助你更有效率地完成任務。同時，助手需要更加主動，就拿搜索界面來舉例子。一個助手給出的不應該是可能的答案，取而代之，它應該給出正確的答案。</p>
+            <p>Google 創始人拉里·佩奇（Larry Page）隨後說到：</p>
+            <ul>
+                <li>
+                    <p style="padding-left: 30px;">
+                        <em>Google 的技術已經迎來了改變，“手氣不錯”就是最好的例子。通過搜索引擎的精準結果，Google 助手可以給用戶超出同期產品更高的體驗。尤其是當它來到一個語境當中，它能展示出令人深刻的表現。廣泛地說，Google 在人工智慧和機器學習領域中是一個英明的領導者。</em>
+                    </p>
+                </li>
+            </ul>
+            <p>即使如此，Google 仍有兩個顯著的缺點。其一已經在前文中提到了，Google 的市場空白不利於助手的應用拓展。這和iOS龐大的用戶群截然相反，除非是像FaceBook那樣的軟體，否則用戶不一定會花大量的時間去下載和使用獨立的應用軟體。</p>
+            <p>其次就是廣告了。 “手氣不錯”確保有問題的搜索不會給Google 任何麻煩。畢竟用戶沒有從搜索結果中去選擇，所述用戶也沒有機會點擊廣告，因此Google 創造的環境和想吸引用戶的廣告商形成了矛盾。Google 助手也有同樣的問題，這些廣告該何去何從？</p>
+            <p>
+                <h2><strong>改變就是好事</strong></h2>
+            <p>在Google 昨天的展示中可以看到，這家公司向即將到來的以語音助手為核心的新世界發起挑戰。發布會本身就是以語音助手作開場。對於Google 而言，純粹的科學技術一直是其核心市場競爭力。</p>
+            <p>然而，當下的世界不再是基於適配於各種網頁的一個個標準瀏覽器，在那樣的世界，擁有強大技術的Google 成為了人們使用網路的入口，而今天我們強調的是圍繞著硬體或者社交網絡展開的封閉的生態系統。於Google 而言，後者已成敗績，前者正是其如今發力之所在。</p>
+            <p>可以說，Google 正踐行Alan Kay 的名言， “真正認真寫軟體的人應該自己做硬體”。為此，該公司推出了諸多硬體設備，包括新手機、之前發布過的 Google 家庭裝置，新的 Chromecast，以及一款新的 VR頭盔。不用說，這些設備會讓用戶比使用任何第三方OEM（更不要說是蘋果的iPhone了）都更輕易的享受到Google 的服務。</p>
+            <p>更有趣的是，Google 還推出了新的商業模式。 Pixel起售價$649，跟 iPhone同價，這意味著Google 需要很長一段時間才能達到與蘋果盈利水平相當的規模。然而事實上，其無疑具有巨大盈利潛力的內建服務才是Google 意義深遠的新方向。</p>
+            <p>然而，所有這一切中最讓人著迷的是Google 打算怎樣來賣Pixel：至少從現在看來，Google 助手作為這款真正意義上的Google 手機的大賣點，意味著體驗的差異化，理論上說，這是盈利的保證。</p>
+            <p>這個戰略聽上去頗為耳熟，讓人不禁疑慮這會否是一場turn-by-turn的災難重演。Google 是不是正在遺忘它們是一家技術公司，它們應該做的是提高其業務的覆蓋面，而不是限制它？</p>
+            <p>我並不這麼認為，實際上我將其看作是一個深刻的戰略轉變，從思維的深度上來說，這就像是一個與Android對立的彈簧。這並不是說Google 是人為限制其水平發展，而是它商業模式在現實世界實現的一種辦法。正如&nbsp;Sundar Pichai所言：</p>
+            <ul>
+                <li>
+                    <p style="padding-left: 30px;">
+                        <em>人工智慧是第一位制約，在現實生活中你必須擁有一個互動點，而且這裡沒有廣告。在渲染Google 的分銷和商業模式的實際意義同時，也要讓這充滿改變意義的技術脫穎而出。</em>
+                    </p>
+                </li>
+            </ul>
+            <p>從這一角度上說，Google 就像是進階版的蘋果： iPhone的銷售管道及商業模式使得Siri成了用戶體驗的主導，但是在人工智慧以及專項服務上還有不少懸而未決的技術問題，此外，蘋果以硬體設備為中心的文化及組織架構都從根本上阻礙了其發展。</p>
+            <p>
+                <h2><strong>Google 的處境切合於舊的商業模式，即盈利等同市場市佔率</strong></h2>
+            <p>Pixel若想成功則必須要體現出它遠超於行業水平的特點，同時它還得有銷售管道。因此，第一Google 需要內部組織結構上重點整合，而不是一味試驗迭代。第二是合作夥伴，對外行銷，以及一大堆Google 歷來都不看重的東西。 Pixel的發布會就是最好的例子，你可以看到&nbsp;Sundar Pichai對於公司未來發展方向的清晰陳述，但是實際產品的展示上卻是像技術天書一樣一塌糊塗。</p>
+            <p>技術對於Google 來說已經足夠了，唯一比業務難的是正在改變的模式。</p>
+        </div>
+        <div class="more-detail">
+            <div id="more">延伸閱讀：</div>
+
+            <div>
+                <a href="https://techfeed.today/2015/09/02/%e8%b0%b7%e6%ad%8c%e5%be%ae%e8%bb%9f%e6%8e%a8%e5%85%8d%e8%b2%bb%e6%96%b0%e8%a6%96%e8%a8%8a%e6%a0%bc%e5%bc%8f%e6%a8%99%e6%ba%96/" title="谷歌微軟推免費新視訊格式標準"><img width="288" height="205" id="one" alt="谷歌微軟推免費新視訊格式標準"></a>
+            </div>
+            <div>
+                <h3 class="entry-title">
+                    <a href="https://techfeed.today/2015/09/02/%e8%b0%b7%e6%ad%8c%e5%be%ae%e8%bb%9f%e6%8e%a8%e5%85%8d%e8%b2%bb%e6%96%b0%e8%a6%96%e8%a8%8a%e6%a0%bc%e5%bc%8f%e6%a8%99%e6%ba%96/" rel="bookmark" title="谷歌微軟推免費新視訊格式標準">谷歌微軟推免費新視訊格式標準</a>
+                </h3>
+            </div>
+
+            <div>
+                <a href="https://techfeed.today/2016/07/29/%e7%be%8e%e5%9c%8b%e5%aa%92%e9%ab%94%e7%a8%b1%e7%84%a1%e4%ba%ba%e9%a7%95%e9%a7%9b%e7%a0%94%e7%99%bc%e4%b8%8a%e7%99%be%e5%ba%a6%e6%af%94google%e6%9b%b4%e6%9c%89%e5%84%aa%e5%8b%a2%ef%bc%8c%e6%98%af/" title="美國媒體稱無人駕駛研發上百度比Google更有優勢，是什麼原因？">
+                <img width="390" height="205" id="two" alt="什麼？美國媒體稱無人駕駛研發上百度比Google更有優勢，是什麼原因？"></a>
+            </div>
+            <div>
+                <h3>
+                    <a href="https://techfeed.today/2016/07/29/%e7%be%8e%e5%9c%8b%e5%aa%92%e9%ab%94%e7%a8%b1%e7%84%a1%e4%ba%ba%e9%a7%95%e9%a7%9b%e7%a0%94%e7%99%bc%e4%b8%8a%e7%99%be%e5%ba%a6%e6%af%94google%e6%9b%b4%e6%9c%89%e5%84%aa%e5%8b%a2%ef%bc%8c%e6%98%af/" rel="bookmark" title="美國媒體稱無人駕駛研發上百度比Google更有優勢，是什麼原因？">美國媒體稱無人駕駛研發上百度比Google更有優勢，是什麼原因？</a>
+                </h3>
+            </div>
+
+            <div>
+                <a href="https://techfeed.today/2016/09/26/google%e9%ab%98%e9%9a%8e%e4%b8%bb%e7%ae%a1%e9%80%a0%e5%8b%a2%ef%bc%9a10%e6%9c%884%e6%97%a5%e7%99%bc%e5%b8%83%e6%9c%83%e5%b0%87%e9%9d%9e%e5%b8%b8%e9%87%8d%e5%a4%a7/" title="Google高階主管造勢：10月4日發布會將非常重大">
+                <img width="390" height="205" id="three" class="attachment-colormag-featured-post-medium size-colormag-featured-post-medium wp-post-image" alt="Google高階主管造勢：10月4日發布會將非常重大"></a>
+            </div>
+
+            <div>
+                <h3>
+                    <a href="https://techfeed.today/2016/09/26/google%e9%ab%98%e9%9a%8e%e4%b8%bb%e7%ae%a1%e9%80%a0%e5%8b%a2%ef%bc%9a10%e6%9c%884%e6%97%a5%e7%99%bc%e5%b8%83%e6%9c%83%e5%b0%87%e9%9d%9e%e5%b8%b8%e9%87%8d%e5%a4%a7/" rel="bookmark" title="Google高階主管造勢：10月4日發布會將非常重大">Google高階主管造勢：10月4日發布會將非常重大</a>
+                </h3>
+            </div>
+        </div>
+    </body>
+</html>
